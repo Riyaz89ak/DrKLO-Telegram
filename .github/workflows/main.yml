@@ -10,7 +10,7 @@ jobs:
 
       - name: Modify Audio Code
         run: |
-          # ஆடியோ மாற்றங்கள்
+          # உங்கள் ஆடியோ பிளான் அப்படியே இதில் உள்ளது
           sed -i 's/AudioSource.MIC/AudioSource.VOICE_COMMUNICATION/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
           sed -i 's/noiseSuppression = true/noiseSuppression = false/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
           sed -i 's/echoCancellation = true/echoCancellation = false/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
@@ -24,13 +24,11 @@ jobs:
       - name: Build APK
         run: |
           chmod +x gradlew
-          # இதுதான் யுனிவர்சல் ஆப்பை உருவாக்கும் மந்திரம்
           ./gradlew assembleDebug -PgenerateUniversalApk=true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Telegram-Universal-Only
-          # குறிப்பிட்ட இந்த ஒரு பைலை மட்டும் எடுக்க
+          name: Telegram-Internal-Audio-App
           path: "TMessagesProj/build/outputs/apk/afat/debug/*universal.apk"
           
