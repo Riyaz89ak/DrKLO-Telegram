@@ -1,0 +1,36 @@
+name: Build Telegram APK
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Modify Audio Code
+        run: |
+          # ஆடியோ மாற்றங்கள்
+          sed -i 's/AudioSource.MIC/AudioSource.VOICE_COMMUNICATION/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
+          sed -i 's/noiseSuppression = true/noiseSuppression = false/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
+          sed -i 's/echoCancellation = true/echoCancellation = false/g' TMessagesProj/src/main/java/org/telegram/messenger/MediaController.java
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build APK
+        run: |
+          chmod +x gradlew
+          # இதுதான் யுனிவர்சல் ஆப்பை உருவாக்கும் மந்திரம்
+          ./gradlew assembleDebug -PgenerateUniversalApk=true
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Telegram-Universal-Only
+          # குறிப்பிட்ட இந்த ஒரு பைலை மட்டும் எடுக்க
+          path: "TMessagesProj/build/outputs/apk/afat/debug/*universal.apk"
+          
