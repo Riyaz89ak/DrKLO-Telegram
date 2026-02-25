@@ -15,21 +15,21 @@ jobs:
           find . -name "MediaController.java" -exec sed -i 's/noiseSuppression = true/noiseSuppression = false/g' {} +
           find . -name "MediaController.java" -exec sed -i 's/echoCancellation = true/echoCancellation = false/g' {} +
 
-      - name: Set up JDK 17
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'temurin'
 
       - name: Build APK
         run: |
           chmod +x gradlew
+          # ஒரு மெயின் யுனிவர்சல் ஆப்பை மட்டும் உருவாக்க
           ./gradlew assembleDebug -PgenerateUniversalApk=true
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Telegram-Universal-Audio-App
-          # இது எல்லா APK-க்களையும் தேடி எடுத்துவிடும், குழப்பம் இருக்காது
           path: "**/*universal.apk"
           
