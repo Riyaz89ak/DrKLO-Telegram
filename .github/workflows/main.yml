@@ -10,10 +10,10 @@ jobs:
 
       - name: Modify Audio Code
         run: |
-          # உங்கள் ஆடியோ பிளானுக்கான துல்லியமான பாத் (Updated for DrKLO)
-          sed -i 's/AudioSource.MIC/AudioSource.VOICE_COMMUNICATION/g' Telegram/src/main/java/org/telegram/messenger/MediaController.java
-          sed -i 's/noiseSuppression = true/noiseSuppression = false/g' Telegram/src/main/java/org/telegram/messenger/MediaController.java
-          sed -i 's/echoCancellation = true/echoCancellation = false/g' Telegram/src/main/java/org/telegram/messenger/MediaController.java
+          # கம்ப்யூட்டரே தேடி உங்கள் ஆடியோ மாற்றங்களைச் செய்யும்
+          find . -name "MediaController.java" -exec sed -i 's/AudioSource.MIC/AudioSource.VOICE_COMMUNICATION/g' {} +
+          find . -name "MediaController.java" -exec sed -i 's/noiseSuppression = true/noiseSuppression = false/g' {} +
+          find . -name "MediaController.java" -exec sed -i 's/echoCancellation = true/echoCancellation = false/g' {} +
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -29,7 +29,7 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Telegram-Universal-Internal-Audio
-          # DrKLO ரிப்போசிட்டரியில் APK இங்கே தான் இருக்கும்
-          path: "Telegram/build/outputs/apk/afat/debug/*universal.apk"
+          name: Telegram-Universal-Audio-App
+          # இது எல்லா APK-க்களையும் தேடி எடுத்துவிடும், குழப்பம் இருக்காது
+          path: "**/*universal.apk"
           
